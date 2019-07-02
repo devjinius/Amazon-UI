@@ -1,0 +1,155 @@
+@import "flex";
+
+$font-size: 16px;
+$card-control-position: 10px;
+
+@function calcRem($size) {
+  @return #{$size / $font-size}rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+.container {
+  max-width: calcRem(1024px);
+  opacity: 0;
+  margin: 0 auto;
+  position: relative;
+}
+
+.nav {
+  height: calcRem(100px);
+  padding: calcRem(20px) 0;
+
+  @include flexbox();
+  @include justify-content(center);
+}
+
+.steelblue {
+  background-color: #2392c0;
+}
+.purple {
+  background-color: #a90067;
+}
+.darkgreen {
+  background-color: #018577;
+}
+.orange {
+  background-color: #e65d17;
+}
+
+.nav-item {
+  width: calcRem(200px);
+  height: calcRem(75px);
+  margin: 0 calcRem(3px);
+  padding: calcRem(20px);
+  color: #fff;
+
+  @include flexbox();
+  @include justify-content(center);
+  @include align-items(center);
+
+  cursor: pointer;
+
+  &.selected {
+    transform: scale(1.1);
+  }
+}
+
+.card-wrapper {
+  position: relative;
+  margin: 0 auto;
+  padding: calcRem(20px) 0;
+  height: auto;
+  overflow: hidden;
+}
+
+.card-slider {
+  @include flexbox();
+}
+
+.card {
+  @include flexbox();
+  @include flex(1 0 auto);
+  overflow: hidden;
+  width: calcRem(700px);
+}
+
+.thumb {
+  @include flexbox();
+  @include justify-content(center);
+  @include align-items(center);
+  @include flex(1 1 auto);
+  img {
+    padding: calcRem(20px);
+    width: calcRem(250px);
+    height: calcRem(250px);
+    object-fit: contain;
+  }
+}
+
+.content {
+  @include flex(1 1 auto);
+  h2 {
+    margin-bottom: calcRem(10px);
+  }
+}
+
+.card-control {
+  position: absolute;
+  font-size: calcRem(22px);
+  top: 50%;
+  width: calcRem(50px);
+  height: calcRem(50px);
+  border-radius: calcRem(25px);
+  background-color: #a9b7b8;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.card-control:focus {
+  outline: none;
+}
+
+.card-control:hover {
+  background-color: #808386;
+}
+.card-control:active {
+  background-color: #495057;
+  border: none;
+}
+
+.prev {
+  left: calcRem($card-control-position);
+}
+
+.next {
+  right: calcRem($card-control-position);
+}
+
+.container2 {
+  max-width: calcRem(1024px);
+  opacity: 0;
+  margin: 0 auto;
+  position: relative;
+}
+
+.card-slider2 {
+  @include flexbox();
+}
+
+.nav2 {
+  height: calcRem(100px);
+  padding: calcRem(20px) 0;
+
+  @include flexbox();
+  @include justify-content(center);
+}

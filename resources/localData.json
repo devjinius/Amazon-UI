@@ -1,0 +1,50 @@
+[
+  {
+    "_id": "1",
+    "title": "Fast, Free Delivery",
+    "desc": [
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+    ],
+    "imgURL": "./resources/images/Card_A01.png",
+    "color": "steelblue"
+  },
+  {
+    "_id": "2",
+    "title": "Exclusive deals and offers",
+    "desc": [
+      "Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum has been the industry's standard dummy t",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+    ],
+    "imgURL": "./resources/images/Card_B01.png",
+    "color": "purple"
+  },
+  {
+    "_id": "3",
+    "title": "Prime Originals, movies and TV shows",
+    "desc": [
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+    ],
+    "imgURL": "./resources/images/Card_C01.png",
+    "color": "darkgreen"
+  },
+  {
+    "_id": "4",
+    "title": "Over 2 million songs ad free",
+    "desc": [
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
+    ],
+    "imgURL": "./resources/images/Card_D01.png",
+    "color": "orange"
+  }
+]
