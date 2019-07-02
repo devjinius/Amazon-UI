@@ -21,9 +21,8 @@ const templates = {
   navItem: data => `<div class="nav-item ${data.color}">${data.title}</div>`
 };
 
-export const makeElements = (items, type) => {
-  return items.reduce((acc, item) => {
-    acc += templates[type](item);
-    return acc;
+export const makeHTMLString = ({ data, type }) => {
+  return data.reduce((acc, cur) => {
+    return (acc += templates[type](cur));
   }, '');
 };

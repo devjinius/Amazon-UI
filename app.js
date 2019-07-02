@@ -1,12 +1,12 @@
 import Jungle from './Jungle/index.js';
-import { makeElements } from './template.js';
+import { makeHTMLString } from './template.js';
 
 const getData = async () =>
   await fetch('./resources/localData.json').then(response => response.json());
 
 const addCardsToDOM = cards => {
-  const cardElements = makeElements(cards, 'card');
-  const navItemElements = makeElements(cards, 'navItem');
+  const cardElements = makeHTMLString({ data: cards, type: 'card' });
+  const navItemElements = makeHTMLString({ data: cards, type: 'navItem' });
 
   document.querySelector('.container').insertAdjacentHTML('afterbegin', cardElements);
   document.querySelector('.nav').insertAdjacentHTML('afterbegin', navItemElements);
