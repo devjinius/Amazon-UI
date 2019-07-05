@@ -8,10 +8,14 @@ class Jungle {
     carousel.init();
 
     if ('nav' in elClassNameObj) {
+      const { duration } = options || {};
+
       const nav = this.createNavigation({
         elClassNameObj: { nav: elClassNameObj.nav },
+        options: { duration },
         observer
       });
+
       observer.register('moveCarousel', nav.setItem, nav);
       observer.register('selectNav', carousel.move, carousel);
     }

@@ -1,10 +1,12 @@
-import { mergeConfig, setCSS } from '../utils/index.js';
+import { mergeConfig, setCSS, removeNodes, isContainClass } from '../utils/index.js';
+import { makeHTMLString } from '../template/index.js';
 
 class Carousel {
   constructor({ container }, observer, config) {
     //DOM
     this.container = document.querySelector(container);
-    this.cardSlider;
+    this.wrapper;
+    this.slider;
 
     // values
     this.itemWidth;
@@ -14,6 +16,7 @@ class Carousel {
     this.offset = 0;
     this.currentItem = this.initIndex + 1;
     this.isMoving = false;
+    this.initStatus = true;
 
     this.defaultConfig = {
       infinite: true,
@@ -29,100 +32,60 @@ class Carousel {
     this.attatchEvent();
     this.setInitialUI();
     setCSS(this.container, 'opacity', 1);
+    this.initStatus = false;
   }
 
   manipulateDOM() {
-    /*
-      사용자가 입력한
-      container
-        card...
-      구조에서
+    const cards = [...this.container.children];
+    this.setInitialDOM(cards);
 
-      container
-        wrapper
-          slider
-            card...
-        button prev
-        button next
-      구조로 DOM을 변경하는 메서드
-    */
-    const cardWrapper = this.makeWrapper();
-    this.cardSlider = this.appendSlider(cardWrapper);
-    this.moveCardsNode();
-    this.container.insertAdjacentElement('afterbegin', cardWrapper);
-    this.appendButtons();
-
-    this.itemWidth = this.cardSlider.firstElementChild.getBoundingClientRect().width;
-    this.itemLength = this.cardSlider.children.length;
-    cardWrapper.style.width = `${this.itemWidth}px`;
+    this.wrapper = this.container.firstElementChild;
+    this.slider = this.wrapper.firstElementChild;
+    this.itemLength = this.slider.children.length;
   }
 
-  makeWrapper() {
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('card-wrapper');
-
-    return wrapper;
-  }
-
-  appendSlider(wrapper) {
-    const slider = document.createElement('div');
-    slider.classList.add('card-slider');
-
-    wrapper.appendChild(slider);
-    return slider;
-  }
-
-  moveCardsNode() {
-    [...this.container.children].forEach(card => {
-      this.container.removeChild(card);
-      this.cardSlider.appendChild(card);
-    });
-  }
-
-  makeButtons() {
-    return [document.createElement('button'), document.createElement('button')].map((button, i) => {
-      button.classList.add('card-control');
-      if (i === 0) {
-        button.classList.add('prev');
-        button.innerText = '<';
-      } else if (i === 1) {
-        button.classList.add('next');
-        button.innerText = '>';
-      }
-      return button;
-    });
-  }
-
-  appendButtons() {
-    [this.prevButton, this.nextButton] = this.makeButtons();
-
-    this.container.insertAdjacentElement('beforeend', this.prevButton);
-    this.container.insertAdjacentElement('beforeend', this.nextButton);
+  setInitialDOM(cards) {
+    removeNodes(cards);
+    const carousel = makeHTMLString({ data: cards, type: 'carousel' });
+    this.container.insertAdjacentHTML('afterbegin', carousel);
   }
 
   attatchEvent() {
-    this.prevButton.addEventListener('click', () => this.prevHandler());
-    this.nextButton.addEventListener('click', () => this.nextHandler());
-
-    this.cardSlider.addEventListener('transitionend', () => this.transitionEndHandler());
+    this.container.addEventListener('click', e => this.buttonClickHanlder(e));
+    this.slider.addEventListener('transitionend', () => this.transitionEndHandler());
   }
 
   setInitialUI() {
+    this.itemWidth = this.slider.firstElementChild.getBoundingClientRect().width;
+    this.wrapper.style.width = `${this.itemWidth}px`;
+
     if (this.config.infinite) {
       this.cloneVirtualCard();
       this.moveWithoutTransition();
     } else {
-      this.setTransition(this.cardSlider, true);
+      this.setTransition(this.slider, true);
       this.isMovable();
     }
   }
 
   cloneVirtualCard() {
-    const firstCard = this.cardSlider.firstElementChild.cloneNode(true);
-    const lastCard = this.cardSlider.lastElementChild.cloneNode(true);
+    const firstCard = this.slider.firstElementChild.cloneNode(true);
+    const lastCard = this.slider.lastElementChild.cloneNode(true);
 
-    this.cardSlider.insertAdjacentElement('afterbegin', lastCard);
-    this.cardSlider.insertAdjacentElement('beforeend', firstCard);
+    this.slider.insertAdjacentElement('afterbegin', lastCard);
+    this.slider.insertAdjacentElement('beforeend', firstCard);
+  }
+
+  buttonClickHanlder(evt) {
+    if (isContainClass(evt.target, 'prev')) {
+      this.move(this.currentItem - 1);
+      return;
+    }
+
+    if (isContainClass(evt.target, 'next')) {
+      this.move(this.currentItem + 1);
+      return;
+    }
   }
 
   transitionEndHandler() {
@@ -132,14 +95,6 @@ class Carousel {
     }
   }
 
-  prevHandler() {
-    this.move({ getId: () => this.currentItem - 1 });
-  }
-
-  nextHandler() {
-    this.move({ getId: () => this.currentItem + 1 });
-  }
-
   isMovable() {
     if (this.config.infinite) return;
 
@@ -147,15 +102,8 @@ class Carousel {
     this.nextButton.disabled = this.isLast();
   }
 
-  move({ getId }) {
-    // 2019.07.02 bugfix
-    // nav에서 currentItem 눌렀을 때에 (id === this.currentItem)
-    // UI 변경이 없어 transition이 일어나지않고 transitionEndHandler가 실행되지 않음.
-    // 따라서 isMoving의 값이 변경되지 않아 버그 발생.
-    // carousel 혼자서 동작한다면 필요하지 않은 코드임.
-    // model을 분리한다면 상태를 관리하는 곳으로 옮겨야하는 코드
-    const id = getId();
-    if (this.isMoving || id === this.currentItem) return;
+  move(id) {
+    if (this.isMoving || (!this.initStatus && this.currentItem === id)) return;
     this.isMoving = true;
 
     const dist = this.config.infinite ? -(this.itemWidth * id) : -(this.itemWidth * (id - 1));
@@ -179,18 +127,16 @@ class Carousel {
   }
 
   moveWithoutTransition() {
-    this.setTransition(this.cardSlider, false);
-    this.move({
-      getId: () => (this.currentItem === 0 ? this.itemLength : 1)
-    });
+    this.setTransition(this.slider, false);
+    this.move(this.currentItem === 0 ? this.itemLength : 1);
     setTimeout(() => {
       this.isMoving = false;
-      this.setTransition(this.cardSlider, true);
+      this.setTransition(this.slider, true);
     }, 0);
   }
 
   moveSlider(dist) {
-    this.cardSlider.style.transform = `translateX(${dist}px)`;
+    this.slider.style.transform = `translateX(${dist}px)`;
   }
 
   isEndOfCards() {

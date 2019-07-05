@@ -1,29 +1,47 @@
+import { setCSS, mergeConfig } from '../utils/index.js';
+
 class Navigation {
-  constructor({ nav }, options, observer) {
-    this.navItems = [...document.querySelector(nav).children];
+  constructor({ nav }, config, observer) {
+    this.nav = document.querySelector(nav);
+    this.navItems = [...this.nav.children];
 
     this.observer = observer;
     this.itemLength = this.navItems.length;
     this.selectedId = 1;
+
+    this.defaultConfig = {
+      duration: 300
+    };
+
+    this.config = mergeConfig(this.defaultConfig, config);
   }
 
   init() {
+    this.setInitialDOM();
     this.attatchEvent();
     this.setItem(this.selectedId);
   }
 
-  attatchEvent() {
-    this.navItems.forEach((item, index) => {
-      item.addEventListener('click', () => {
-        const id = index + 1;
-        this.setItem(id);
-      });
+  setInitialDOM() {
+    this.navItems.forEach((item, i) => {
+      item.setAttribute('data-id', i + 1);
+      setCSS(item, 'transition', `transform ${this.config.duration}ms`);
     });
+  }
+
+  attatchEvent() {
+    this.nav.addEventListener('click', event => this.clickHandler(event));
+  }
+
+  clickHandler(evt) {
+    const id = evt.target.dataset.id;
+    if (!id) return;
+    this.setItem(parseInt(id));
   }
 
   setItem(id) {
     this.selectedId = id;
-    this.observer.notify('selectNav', { getId: () => this.selectedId });
+    this.observer.notify('selectNav', this.selectedId);
     this.selectNav();
   }
 
