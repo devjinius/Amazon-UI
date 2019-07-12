@@ -1,5 +1,5 @@
 import Observer from '../observer/Observer.js';
-import { setCSS, removeNodes } from '../utils/index.js';
+import { setCSS, removeNodes } from '../../JinUtil/index.js';
 import { makeHTMLString } from '../template/index.js';
 
 class Carousel extends Observer {

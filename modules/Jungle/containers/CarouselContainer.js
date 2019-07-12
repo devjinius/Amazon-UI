@@ -1,6 +1,7 @@
-import Carousel from '../components/Carousel.js';
-import { isContainClass, mergeConfig } from '../utils/index.js';
-import Store from '../model/index.js';
+import { Carousel, Navigation } from '../components/index.js';
+import Store from '../store/index.js';
+
+import { isContainClass, mergeConfig, sleep } from '../../JinUtil/index.js';
 
 export default class CarouselContainer {
   constructor({ classNameObj, options }) {
@@ -11,27 +12,64 @@ export default class CarouselContainer {
     };
 
     this.options = mergeConfig(defaultOptions, options);
+    this.store = this.getStore(classNameObj);
+    this.props = this.getProps();
 
-    this.store = new Store({
+    this.carousel = this.getView(classNameObj, 'carousel');
+
+    if ('nav' in classNameObj) {
+      this.nav = this.getView(classNameObj, 'navigation');
+    }
+  }
+
+  getStore({ container }) {
+    return new Store({
       currentItem: 1,
-      itemLength: document.querySelector(classNameObj.container).children.length,
+      itemLength: document.querySelector(container).children.length,
       infinite: this.options.infinite
     });
+  }
 
-    const props = {
+  getProps() {
+    return {
       currentItem: this.store.state.currentItem,
       itemLength: this.store.state.itemLength
     };
+  }
 
-    this.carousel = new Carousel({
+  getView(classNameObj, type) {
+    let returnObject;
+
+    if (type === 'carousel') {
+      returnObject = this.getCarousel(classNameObj);
+    }
+
+    if (type === 'navigation') {
+      returnObject = this.getNavigation(classNameObj);
+    }
+
+    this.store.on(returnObject);
+    returnObject.init();
+
+    return returnObject;
+  }
+
+  getCarousel(classNameObj) {
+    return new Carousel({
       container: classNameObj.container,
       options: this.options,
       onClick: this.carouselClickHandler.bind(this),
-      props
+      props: this.props
     });
+  }
 
-    this.store.on(this.carousel);
-    this.carousel.init();
+  getNavigation(classNameObj) {
+    return new Navigation({
+      nav: classNameObj.nav,
+      options: this.options,
+      onClick: this.navClickHandler.bind(this),
+      props: this.props
+    });
   }
 
   carouselClickHandler({ target }) {
@@ -63,7 +101,7 @@ export default class CarouselContainer {
   moveNoTransition(moveId) {
     const { state } = this.store;
 
-    this.sleep(this.options.duration).then(_ => {
+    sleep(this.options.duration).then(_ => {
       const newMoveId = this.carousel.isFirst(moveId) ? state.itemLength : 1;
 
       this.carousel.move({ id: newMoveId, transition: false });
@@ -71,23 +109,9 @@ export default class CarouselContainer {
     });
   }
 
-  sleep(delay) {
-    return new Promise(resolve => setTimeout(resolve, delay));
+  navClickHandler(evt) {
+    const id = evt.target.dataset.id;
+    if (!id) return;
+    this.store.setState({ ...this.store.state, currentItem: parseInt(id) });
   }
 }
-
-// if ('nav' in elClassNameObj) {
-//   const { duration } = options || {};
-
-//   const nav = this.createNavigation({
-//     elClassNameObj: { nav: elClassNameObj.nav },
-//     options: { duration },
-//     model
-//   });
-
-//   model.on(carousel);
-//   model.on(nav);
-// }
-
-// return carousel;
-// };

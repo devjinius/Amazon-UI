@@ -14,3 +14,9 @@ export const removeNodes = items => {
 };
 
 export const isContainClass = (target, className) => target.classList.contains(className);
+
+export const sleep = delay => {
+  return new Promise(resolve => setTimeout(resolve, delay));
+};
+
+export const getData = url => fetch(url).then(response => response.json());

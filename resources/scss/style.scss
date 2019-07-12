@@ -1,7 +1,6 @@
-@import "flex";
+@import 'flex';
 
 $font-size: 16px;
-$card-control-position: 10px;
 
 @function calcRem($size) {
   @return #{$size / $font-size}rem;
@@ -22,6 +21,80 @@ li {
   opacity: 0;
   margin: 0 auto;
   position: relative;
+}
+
+.auto-container {
+  max-width: calcRem(1024px);
+  box-sizing: border-box;
+  margin: calcRem(30px) auto calcRem(10px) auto;
+  opacity: 1;
+  position: relative;
+
+  & input {
+    width: calcRem(400px);
+    height: calcRem(40px);
+    box-sizing: border-box;
+    margin: 0;
+    padding-left: calcRem(5px);
+    border: none;
+    border: 1px solid #ced4da;
+    border-top-left-radius: calcRem(5px);
+    border-bottom-left-radius: calcRem(5px);
+
+    &:focus {
+      outline-color: #eb6;
+    }
+  }
+
+  & button {
+    width: calcRem(50px);
+    height: calcRem(40px);
+    box-sizing: border-box;
+    background-color: #eb6;
+    border: 0px solid #eb6;
+    border-bottom-right-radius: calcRem(5px);
+    border-top-right-radius: calcRem(5px);
+    line-height: 2.2;
+    vertical-align: center;
+
+    & img {
+      width: calcRem(20px);
+      height: calcRem(20px);
+      vertical-align: middle;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.autocomplete-wrapper {
+  width: calcRem(450px);
+  box-sizing: border-box;
+}
+
+.autocomplete-area {
+  position: absolute;
+  width: inherit;
+  border: 1px solid #ced4da;
+  padding: calcRem(5px);
+  background-color: #fff;
+  z-index: 1000;
+
+  font-weight: bold;
+
+  & li {
+    list-style: none;
+  }
+
+  & span {
+    font-weight: 300;
+  }
+
+  & .selected {
+    background-color: #e9ecef;
+  }
 }
 
 .nav {
@@ -57,22 +130,6 @@ li {
   @include align-items(center);
 
   cursor: pointer;
-
-  &.selected {
-    transform: scale(1.1);
-  }
-}
-
-.card-wrapper {
-  position: relative;
-  margin: 0 auto;
-  padding: calcRem(20px) 0;
-  height: auto;
-  overflow: hidden;
-}
-
-.card-slider {
-  @include flexbox();
 }
 
 .card {
@@ -100,56 +157,4 @@ li {
   h2 {
     margin-bottom: calcRem(10px);
   }
-}
-
-.card-control {
-  position: absolute;
-  font-size: calcRem(22px);
-  top: 50%;
-  width: calcRem(50px);
-  height: calcRem(50px);
-  border-radius: calcRem(25px);
-  background-color: #a9b7b8;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-.card-control:focus {
-  outline: none;
-}
-
-.card-control:hover {
-  background-color: #808386;
-}
-.card-control:active {
-  background-color: #495057;
-  border: none;
-}
-
-.prev {
-  left: calcRem($card-control-position);
-}
-
-.next {
-  right: calcRem($card-control-position);
-}
-
-.container2 {
-  max-width: calcRem(1024px);
-  opacity: 0;
-  margin: 0 auto;
-  position: relative;
-}
-
-.card-slider2 {
-  @include flexbox();
-}
-
-.nav2 {
-  height: calcRem(100px);
-  padding: calcRem(20px) 0;
-
-  @include flexbox();
-  @include justify-content(center);
 }

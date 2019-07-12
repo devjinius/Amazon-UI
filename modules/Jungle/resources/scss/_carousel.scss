@@ -1,0 +1,53 @@
+@import 'flex';
+
+$font-size: 16px;
+$card-control-position: 10px;
+
+@function calcRem($size) {
+  @return #{$size / $font-size}rem;
+}
+
+.card-wrapper {
+  position: relative;
+  margin: 0 auto;
+  padding: calcRem(20px) 0;
+  height: auto;
+  overflow: hidden;
+}
+
+.card-slider {
+  @include flexbox();
+}
+
+.card-control {
+  position: absolute;
+  font-size: calcRem(22px);
+  top: 50%;
+  width: calcRem(50px);
+  height: calcRem(50px);
+  border-radius: calcRem(25px);
+  background-color: #a9b7b8;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.card-control:focus {
+  outline: none;
+}
+
+.card-control:hover {
+  background-color: #808386;
+}
+.card-control:active {
+  background-color: #495057;
+  border: none;
+}
+
+.prev {
+  left: calcRem($card-control-position);
+}
+
+.next {
+  right: calcRem($card-control-position);
+}
