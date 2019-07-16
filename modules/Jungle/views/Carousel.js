@@ -1,12 +1,12 @@
 import Observer from '../observer/Observer.js';
-import { setCSS, removeNodes } from '../../JinUtil/index.js';
+import { setCSS, removeNodes, qs } from '../../JinUtil/index.js';
 import { makeHTMLString } from '../template/index.js';
 
 class Carousel extends Observer {
   constructor({ container, options, onClick, props }) {
     super();
     //DOM
-    this.container = document.querySelector(container);
+    this.container = qs(container);
     this.wrapper;
     this.slider;
 
@@ -30,8 +30,8 @@ class Carousel extends Observer {
 
     this.wrapper = this.container.firstElementChild;
     this.slider = this.wrapper.firstElementChild;
-    this.prevButton = this.container.querySelector('button.prev');
-    this.nextButton = this.container.querySelector('button.next');
+    this.prevButton = this.container.qs('button.prev');
+    this.nextButton = this.container.qs('button.next');
   }
 
   setInitialDOM(cards) {

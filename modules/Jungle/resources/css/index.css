@@ -42,3 +42,58 @@
 
 .navigation-selected {
   transform: scale(1.1); }
+
+.auto-container {
+  max-width: 64rem;
+  box-sizing: border-box;
+  margin: 1.875rem auto 0.625rem auto;
+  opacity: 1;
+  position: relative; }
+
+.auto-wrapper {
+  width: 28.125rem;
+  box-sizing: border-box; }
+  .auto-wrapper input {
+    width: 25rem;
+    height: 2.5rem;
+    box-sizing: border-box;
+    margin: 0;
+    padding-left: 0.3125rem;
+    border: none;
+    border: 1px solid #ced4da;
+    border-top-left-radius: 0.3125rem;
+    border-bottom-left-radius: 0.3125rem; }
+    .auto-wrapper input:focus {
+      outline-color: #eb6; }
+  .auto-wrapper button {
+    width: 3.125rem;
+    height: 2.5rem;
+    box-sizing: border-box;
+    background-color: #eb6;
+    border: 0px solid #eb6;
+    border-bottom-right-radius: 0.3125rem;
+    border-top-right-radius: 0.3125rem;
+    line-height: 2.2;
+    vertical-align: center; }
+    .auto-wrapper button:focus {
+      outline-color: #fcbd50; }
+    .auto-wrapper button img {
+      width: 1.25rem;
+      height: 1.25rem;
+      vertical-align: middle; }
+
+.auto-area {
+  position: absolute;
+  width: inherit;
+  border: 1px solid #ced4da;
+  padding: 0.3125rem;
+  background-color: #fff;
+  z-index: 1000;
+  display: none;
+  font-weight: bold; }
+  .auto-area li {
+    list-style: none; }
+  .auto-area span {
+    font-weight: 300; }
+  .auto-area .selected {
+    background-color: #e9ecef; }

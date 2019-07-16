@@ -1,10 +1,12 @@
-import Carousel from './components/Carousel.js';
-import Navigation from './components/Navigation.js';
-import * as containers from './containers/index.js';
+import * as components from './components/index.js';
 
 class Jungle {
   createCarousel({ classNameObj, options }) {
-    return new containers.CarouselContainer({ classNameObj, options });
+    return new components.Carousel({ classNameObj, options });
+  }
+
+  createSearch({ classNameObj, options }) {
+    return new components.Search({ classNameObj, options });
   }
 }
 

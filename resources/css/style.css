@@ -12,60 +12,6 @@ li {
   margin: 0 auto;
   position: relative; }
 
-.auto-container {
-  max-width: 64rem;
-  box-sizing: border-box;
-  margin: 1.875rem auto 0.625rem auto;
-  opacity: 1;
-  position: relative; }
-  .auto-container input {
-    width: 25rem;
-    height: 2.5rem;
-    box-sizing: border-box;
-    margin: 0;
-    padding-left: 0.3125rem;
-    border: none;
-    border: 1px solid #ced4da;
-    border-top-left-radius: 0.3125rem;
-    border-bottom-left-radius: 0.3125rem; }
-    .auto-container input:focus {
-      outline-color: #eb6; }
-  .auto-container button {
-    width: 3.125rem;
-    height: 2.5rem;
-    box-sizing: border-box;
-    background-color: #eb6;
-    border: 0px solid #eb6;
-    border-bottom-right-radius: 0.3125rem;
-    border-top-right-radius: 0.3125rem;
-    line-height: 2.2;
-    vertical-align: center; }
-    .auto-container button img {
-      width: 1.25rem;
-      height: 1.25rem;
-      vertical-align: middle; }
-      .auto-container button img:focus {
-        outline: none; }
-
-.autocomplete-wrapper {
-  width: 28.125rem;
-  box-sizing: border-box; }
-
-.autocomplete-area {
-  position: absolute;
-  width: inherit;
-  border: 1px solid #ced4da;
-  padding: 0.3125rem;
-  background-color: #fff;
-  z-index: 1000;
-  font-weight: bold; }
-  .autocomplete-area li {
-    list-style: none; }
-  .autocomplete-area span {
-    font-weight: 300; }
-  .autocomplete-area .selected {
-    background-color: #e9ecef; }
-
 .nav {
   height: 6.25rem;
   padding: 1.25rem 0;

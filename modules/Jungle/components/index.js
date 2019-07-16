@@ -1,4 +1,4 @@
-import Carousel from './Carousel.js';
-import Navigation from './Navigation.js';
+import Carousel from './CarouselComponent.js';
+import Search from './SearchComponent.js';
 
-export { Carousel, Navigation };
+export { Carousel, Search };

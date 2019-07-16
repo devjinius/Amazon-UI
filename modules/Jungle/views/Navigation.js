@@ -1,8 +1,8 @@
-import { setCSS } from '../../JinUtil/index.js';
+import { setCSS, qs } from '../../JinUtil/index.js';
 
 class Navigation {
   constructor({ nav, options, onClick, props }) {
-    this.nav = document.querySelector(nav);
+    this.nav = qs(nav);
     this.navItems = [...this.nav.children];
 
     this.options = options;
