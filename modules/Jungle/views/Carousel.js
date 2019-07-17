@@ -1,10 +1,8 @@
-import Observer from '../observer/Observer.js';
 import { setCSS, removeNodes, qs } from '../../JinUtil/index.js';
 import { makeHTMLString } from '../template/index.js';
 
-class Carousel extends Observer {
+class Carousel {
   constructor({ container, options, onClick, props }) {
-    super();
     //DOM
     this.container = qs(container);
     this.wrapper;
