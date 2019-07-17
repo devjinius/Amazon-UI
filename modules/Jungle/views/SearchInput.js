@@ -1,5 +1,5 @@
 import { makeHTMLString } from '../template/index.js';
-import { qs } from '../../JinUtil/index.js';
+import { qs, isMatchedKey } from '../../JinUtil/index.js';
 
 export default class SearchInput {
   constructor({ container, onChange, onBlur, onFocus, onClick }) {
@@ -16,9 +16,9 @@ export default class SearchInput {
   }
 
   setInitialUI() {
-    const autoInput = makeHTMLString({ type: 'searchInput' });
-    this.container.insertAdjacentHTML('afterbegin', autoInput);
-    this.searchInput = this.container.qs('#auto-search');
+    const searchInput = makeHTMLString({ type: 'searchInput' });
+    this.container.insertAdjacentHTML('afterbegin', searchInput);
+    this.searchInput = this.container.qs('#search-input');
     this.button = this.searchInput.nextElementSibling;
   }
 
@@ -27,11 +27,13 @@ export default class SearchInput {
     this.searchInput.addEventListener('keydown', e => this.preventMoveCursor(e));
     this.searchInput.addEventListener('blur', _ => this.onBlur());
     this.searchInput.addEventListener('focus', _ => this.onFocus());
-    this.button.addEventListener('click', e => this.onClick(e, this.searchInput.value));
+    this.button.addEventListener('click', _ => this.onClick(this.searchInput.value));
   }
 
+  // 위아래 방향키 입력 시 input cursor 움직임을 막기 위한 메서드
   preventMoveCursor(e) {
-    if (e.keyCode == 38 || e.keyCode == 40) {
+    const { keyCode } = e;
+    if (isMatchedKey(keyCode, 'upArrow') || isMatchedKey(keyCode, 'downArrow')) {
       e.preventDefault();
     }
   }

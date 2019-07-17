@@ -25,3 +25,6 @@ HTMLElement.prototype.qs = className => document.querySelector(className);
 HTMLElement.prototype.qsa = className => document.querySelectorAll(className);
 export const qs = className => document.querySelector(className);
 export const qsa = className => document.querySelectorAll(className);
+
+const keyCodeTable = { enter: 13, upArrow: 38, downArrow: 40 };
+export const isMatchedKey = (code, type) => keyCodeTable[type] === code;

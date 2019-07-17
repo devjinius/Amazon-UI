@@ -4,7 +4,7 @@ $font-size: 16px;
   @return #{$size / $font-size}rem;
 }
 
-.auto-container {
+.search-container {
   max-width: calcRem(1024px);
   box-sizing: border-box;
   margin: calcRem(30px) auto calcRem(10px) auto;
@@ -12,7 +12,7 @@ $font-size: 16px;
   position: relative;
 }
 
-.auto-wrapper {
+.search-wrapper {
   width: calcRem(450px);
   box-sizing: border-box;
 

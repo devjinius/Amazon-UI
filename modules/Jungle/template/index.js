@@ -27,9 +27,9 @@ const templates = {
 
   searchInput: _ => {
     return `
-      <div class="auto-container">
-        <div class="auto-wrapper">
-          <input type="text" name="auto-search" id="auto-search" class="auto-search" /><button>
+      <div class="search-container">
+        <div class="search-wrapper">
+          <input type="text" name="search-input" id="search-input" class="search-input" /><button>
             <img src="./resources/images/search-icon.png" />
           </button>
         </div>
