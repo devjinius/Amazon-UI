@@ -93,12 +93,13 @@ export default class SearchComponent {
     }
 
     const matchinglist = this.getData(value);
+
     this.store.setState({
       ...state,
       isWriting: true,
       query: value,
       currentItem: -1,
-      itemLength: !value ? recentQueries.length : matchedQueries.length,
+      itemLength: !value ? recentQueries.length : matchinglist.length,
       matchedQueries: matchinglist
     });
   }
