@@ -51,9 +51,9 @@ const templates = {
       const length = prefix.length;
       return `
         ${lists.reduce(
-          (acc, str) =>
+          (acc, list) =>
             (acc += `
-          <li><span>${str.substring(0, length)}</span>${str.substring(length)}</li>`),
+          <li><span>${list.value.substring(0, length)}</span>${list.value.substring(length)}</li>`),
           ''
         )}
       `;

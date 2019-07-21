@@ -6,13 +6,12 @@ const CARD_URL = './resources/localData.json';
 
 window.addEventListener('DOMContentLoaded', () => {
   const data = getData(CARD_URL);
-  let carousel, autoComplete;
+  let carousel;
 
-  // prettier-ignore
-  data
-    .then(cards => renderCard(cards))
-    .then(_ => {
-      carousel = makeCarousel();
-      autoComplete = makeSearch();
-    });
+  data.then(cards => {
+    renderCard(cards);
+    carousel = makeCarousel();
+  });
+
+  const autoComplete = makeSearch();
 });

@@ -1,7 +1,7 @@
 import { SearchInput, AutoMatchedList, AutoRecentList } from '../views/index.js';
 import Store from '../store/index.js';
 
-import { mergeConfig, qs, isMatchedKey } from '../../JinUtil/index.js';
+import { mergeConfig, qs, isMatchedKey, debounce } from '../../JinUtil/index.js';
 
 export default class SearchComponent {
   constructor({ classNameObj, options }) {
@@ -71,7 +71,7 @@ export default class SearchComponent {
     });
   }
 
-  inputChangeHandler({ keyCode, target }) {
+  async inputChangeHandler({ keyCode, target }) {
     const { state } = this.store;
     const { currentItem, recentQueries, matchedQueries } = state;
     const { value } = target;
@@ -87,21 +87,23 @@ export default class SearchComponent {
         return;
       }
 
-      const searchValue = !value ? recentQueries[currentItem] : matchedQueries[currentItem];
+      const searchValue = !value ? recentQueries[currentItem] : matchedQueries[currentItem].value;
       this.search(searchValue);
       return;
     }
 
-    const matchinglist = this.getData(value);
+    const matchinglist = await this.getData(value);
 
-    this.store.setState({
+    const newState = {
       ...state,
       isWriting: true,
       query: value,
       currentItem: -1,
       itemLength: !value ? recentQueries.length : matchinglist.length,
       matchedQueries: matchinglist
-    });
+    };
+
+    debounce(this.store.setState.bind(this.store), 1200, newState);
   }
 
   getNewItem(keyCode, { currentItem, itemLength }) {
@@ -118,28 +120,27 @@ export default class SearchComponent {
     return newItem;
   }
 
-  // 추후 서버로 데이터를 불러오는 부분
-  // 지금은 fetch로 요청을 보내지 않고 로컬에서 처리함
-  getData(prefix) {
-    const data = {
-      i: ['iphone', 'icon', 'infinite', 'input', 'instagram'],
-      ip: ['ipad', 'ipconfig', 'iphone', 'iptime', 'ip'],
-      iph: ['iphone', 'iphone11', 'iphone xs', 'iphone wallpaper', 'iphone mockup'],
-      ipho: ['iphone', 'iphone11', 'iphone xs', 'iphone wallpaper', 'iphone se', 'iphone se2'],
-      iphon: ['iphone', 'iphone11', 'iphone xs', 'iphone wallpaper', 'iphone se2', 'iphone xr'],
-      iphone: ['iphone', 'iphone11', 'iphone xs', 'iphone xr', 'iphone mockup', 'iphone x']
-    };
+  async getData(prefix) {
+    const url =
+      'https://h3rb9c0ugl.execute-api.ap-northeast-2.amazonaws.com/develop/amazon_autocomplete?query=';
 
-    const returnData = data[prefix];
+    try {
+      const data = await fetch(url + prefix).then(data => data.json());
 
-    if (!returnData) {
-      return [prefix];
+      if (data.statusCode === 404) {
+        throw new Error('resources not found error');
+        // return [{ value: prefix }];
+      }
+
+      return data.body.suggestions;
+    } catch (error) {
+      console.warn(error);
+      return [{ value: prefix }];
     }
-    return returnData;
   }
 
   // 추후 서버로 검색 req를 보내는 method
-  // 지금은 활성화된 기능이 비활성화 되며 최근 검색어에만 추가함
+  // 활성화된 기능이 비활성화 되며 최근 검색어에만 추가함
   search(value) {
     if (!value) return;
 
