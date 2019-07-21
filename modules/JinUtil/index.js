@@ -31,11 +31,14 @@ const keyCodeTable = { enter: 13, upArrow: 38, downArrow: 40 };
 export const isMatchedKey = (code, type) => keyCodeTable[type] === code;
 
 let timer;
-export const debounce = (fn, delay, args) => {
+export const asyncDebounce = async (fn, delay, args) => {
   if (timer) {
     clearTimeout(timer);
   }
-  timer = setTimeout(function() {
-    fn.call(this, args);
-  }, delay);
+
+  return new Promise((resolve, reject) => {
+    timer = setTimeout(function() {
+      resolve(fn(args));
+    }, delay);
+  });
 };

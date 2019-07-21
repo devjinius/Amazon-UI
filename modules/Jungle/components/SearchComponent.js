@@ -1,7 +1,7 @@
 import { SearchInput, AutoMatchedList, AutoRecentList } from '../views/index.js';
 import Store from '../store/index.js';
 
-import { mergeConfig, qs, isMatchedKey, debounce } from '../../JinUtil/index.js';
+import { mergeConfig, qs, isMatchedKey, asyncDebounce } from '../../JinUtil/index.js';
 
 export default class SearchComponent {
   constructor({ classNameObj, options }) {
@@ -92,7 +92,7 @@ export default class SearchComponent {
       return;
     }
 
-    const matchinglist = await this.getData(value);
+    const matchinglist = await asyncDebounce(this.getData, 1200, value);
 
     const newState = {
       ...state,
@@ -103,7 +103,7 @@ export default class SearchComponent {
       matchedQueries: matchinglist
     };
 
-    debounce(this.store.setState.bind(this.store), 1200, newState);
+    this.store.setState(newState);
   }
 
   getNewItem(keyCode, { currentItem, itemLength }) {
@@ -125,14 +125,17 @@ export default class SearchComponent {
       'https://h3rb9c0ugl.execute-api.ap-northeast-2.amazonaws.com/develop/amazon_autocomplete?query=';
 
     try {
-      const data = await fetch(url + prefix).then(data => data.json());
+      const { statusCode, body } = await fetch(url + prefix).then(data => data.json());
 
-      if (data.statusCode === 404) {
-        throw new Error('resources not found error');
-        // return [{ value: prefix }];
+      if (statusCode === 200) {
+        return body.suggestions;
       }
 
-      return data.body.suggestions;
+      if (statusCode === 404) {
+        throw new Error('Resource not found');
+      }
+
+      throw new Error(`[error] status code: ${statusCode}`);
     } catch (error) {
       console.warn(error);
       return [{ value: prefix }];
